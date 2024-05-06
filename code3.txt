@@ -18,7 +18,7 @@ print(summary)
 
 # Define a custom function to calculate count, mean, standard deviation, mode, median, min, and max
 def custom_describe(x):
-    mode_value = stats.mode(x)[0][0]  # Using scipy.stats for mode calculation
+    mode_value = stats.mode(x)  # Using scipy.stats for mode calculation
     median_value = np.median(x)
     return pd.Series([x.count(), x.mean(), x.std(), mode_value, median_value, x.min(), x.max()],
                      index=['count', 'mean', 'std', 'mode', 'median', 'min', 'max'])
@@ -28,7 +28,7 @@ summary_with_mode_median = df.groupby('Species')['SepalLengthCm'].apply(custom_d
 print(summary_with_mode_median)
 
 # Mode summary
-mode_summary = df.groupby('Species')['SepalLengthCm'].apply(lambda x: stats.mode(x)[0][0])
+mode_summary = df.groupby('Species')['SepalLengthCm'].apply(lambda x: stats.mode(x))
 print("Mode:")
 print(mode_summary)
 
