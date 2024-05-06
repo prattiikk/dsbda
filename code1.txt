@@ -1,0 +1,48 @@
+# Import pandas library as pd
+import pandas as pd
+
+# Import opendatasets library as od
+import opendatasets as od
+
+# Download the dataset from Kaggle using opendatasets
+od.download("https://www.kaggle.com/datasets/tawfikelmetwally/automobile-dataset")
+
+# Read the CSV file into a DataFrame and assign it to the variable df
+# Notice the correction here: Changed df.pd.read_csv to pd.read_csv
+df = pd.read_csv("automobile-dataset/Automobile.csv")
+
+# Print the DataFrame to check its contents
+print(df)
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Display the last few rows of the DataFrame
+df.tail()
+
+# Check for null values in the DataFrame and return a DataFrame of boolean values
+df.isnull()
+
+# Sum the number of null values in each column of the DataFrame
+df.isnull().sum()
+
+# Check for non-null values in the DataFrame and return a DataFrame of boolean values
+df.notnull()
+
+# Sum the number of non-null values in each column of the DataFrame
+df.notnull().sum()
+
+# Extract unique values of the 'origin' column
+region = df['origin'].unique()
+
+# Print the unique values of the 'origin' column
+print(region)
+
+# Create a mapping dictionary to encode the 'origin' column
+mapping = {'usa': 1, 'japan': 2, 'europe': 3}
+
+# Map the values of the 'origin' column to their corresponding numerical values using the mapping dictionary
+df['origin_encoded'] = df['origin'].map(mapping)
+
+# Display the first few rows of the DataFrame with the new encoded column
+df.head()

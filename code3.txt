@@ -1,0 +1,63 @@
+import pandas as pd
+import numpy as np
+import opendatasets as od
+from scipy import stats
+
+# Download dataset
+od.download("https://www.kaggle.com/datasets/uciml/iris")
+
+# Read the dataset into a pandas DataFrame
+df = pd.read_csv("iris/Iris.csv")
+
+# Display the first few rows of the DataFrame
+print(df.head())
+
+# Summary statistics for SepalLengthCm grouped by Species
+summary = df.groupby('Species')['SepalLengthCm'].describe()
+print(summary)
+
+# Define a custom function to calculate count, mean, standard deviation, mode, median, min, and max
+def custom_describe(x):
+    mode_value = stats.mode(x)[0][0]  # Using scipy.stats for mode calculation
+    median_value = np.median(x)
+    return pd.Series([x.count(), x.mean(), x.std(), mode_value, median_value, x.min(), x.max()],
+                     index=['count', 'mean', 'std', 'mode', 'median', 'min', 'max'])
+
+# Summary statistics with mode and median
+summary_with_mode_median = df.groupby('Species')['SepalLengthCm'].apply(custom_describe)
+print(summary_with_mode_median)
+
+# Mode summary
+mode_summary = df.groupby('Species')['SepalLengthCm'].apply(lambda x: stats.mode(x)[0][0])
+print("Mode:")
+print(mode_summary)
+
+# Median summary
+median_summary = df.groupby('Species')['SepalLengthCm'].median()
+print("Median:")
+print(median_summary)
+
+# Mean summary
+mean_summary = df.groupby('Species')['SepalLengthCm'].mean()
+print("Mean:")
+print(mean_summary)
+
+# Numeric count of each species
+species_numeric_value = df['Species'].value_counts().tolist()
+print(species_numeric_value)
+
+# Descriptive statistics for each species
+species_stats = df.groupby('Species').describe()
+print(species_stats)
+
+# Individual descriptive statistics for each species
+setosa_stats = df[df['Species'] == 'Iris-setosa'].describe()
+versicolor_stats = df[df['Species'] == 'Iris-versicolor'].describe()
+virginica_stats = df[df['Species'] == 'Iris-virginica'].describe()
+
+print("Setosa Statistics:")
+print(setosa_stats)
+print("\nVersicolor Statistics:")
+print(versicolor_stats)
+print("\nVirginica Statistics:")
+print(virginica_stats)

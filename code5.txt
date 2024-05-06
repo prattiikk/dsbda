@@ -1,0 +1,65 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt  # Corrected import name
+
+
+# Load the dataset
+dataset = pd.read_csv('social_network_ads.csv')
+
+
+# Select independent variables (features) and dependent variable (target)
+x = dataset.iloc[:, [2, 3]].values  # Independent variables (columns 2 and 3)
+y = dataset.iloc[:, 4].values       # Dependent variable (column 4)
+
+
+# Split the dataset into training and testing sets
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=0)
+
+
+# Feature Scaling to standardize the features
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+x_train = sc.fit_transform(x_train)
+x_test = sc.transform(x_test)
+
+
+# Import and initialize Logistic Regression model
+from sklearn.linear_model import LogisticRegression
+log_reg = LogisticRegression(random_state=0)
+
+
+# Train the Logistic Regression model
+log_reg.fit(x_train, y_train)
+
+
+# Make predictions on the test set
+y_pred = log_reg.predict(x_test)
+
+
+# Evaluate the model
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score
+
+
+# Calculate accuracy
+accuracy = accuracy_score(y_test, y_pred)
+
+
+# Calculate error rate
+error_rate = 1 - accuracy
+
+
+# Calculate precision
+precision = precision_score(y_test, y_pred)
+
+
+# Calculate recall
+recall = recall_score(y_test, y_pred)
+
+
+
+# Print the evaluation metrics
+print("Accuracy:", accuracy)
+print("Error Rate:", error_rate)
+print("Precision:", precision)
+print("Recall:", recall)

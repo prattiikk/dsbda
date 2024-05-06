@@ -1,0 +1,83 @@
+# Import necessary libraries
+import pandas as pd
+import opendatasets as od
+import numpy as np
+
+# Download dataset using opendatasets library
+od.download("https://www.kaggle.com/datasets/sankha1998/student-semester-result")
+
+# Read the dataset into a pandas DataFrame
+df = pd.read_csv("student-semester-result/data.csv")
+
+# Display the DataFrame
+print(df)
+
+# Check information about the DataFrame
+df.info()
+
+# Check for missing values in the DataFrame
+df.isnull().sum()
+
+# Calculate the average marks for each paper
+avg_1st_Marks = df["1st"].astype("float64").mean(axis=0)
+avg_2nd_Marks = df["2nd"].astype("float64").mean(axis=0)
+avg_3rd_Marks = df["3rd"].astype("float64").mean(axis=0)
+avg_4th_Marks = df["4th"].astype("float64").mean(axis=0)
+avg_5th_Marks = df["5th"].astype("float64").mean(axis=0)
+
+# Print the average marks for each paper
+print("Average marks of 1st Paper :", avg_1st_Marks)
+print("Average marks of 2nd Paper :", avg_2nd_Marks)
+print("Average marks of 3rd Paper :", avg_3rd_Marks)
+print("Average marks of 4th Paper :", avg_4th_Marks)
+print("Average marks of 5th Paper :", avg_5th_Marks)
+
+# Replace missing values with the average marks for each paper
+df["1st"].replace(np.nan, avg_1st_Marks, inplace=True)
+df["2nd"].replace(np.nan, avg_2nd_Marks, inplace=True)
+df["3rd"].replace(np.nan, avg_3rd_Marks, inplace=True)
+df["4th"].replace(np.nan, avg_4th_Marks, inplace=True)
+df["5th"].replace(np.nan, avg_5th_Marks, inplace=True)
+
+# Check for missing values again
+df.isnull().sum()
+
+# Calculate the average roll number
+avg_roll = df["Roll"].astype("float64").mean(axis=0)
+
+# Print the average roll number
+print("Average roll no is :", avg_roll)
+
+# Replace missing roll numbers with the average roll number
+df["Roll"].replace(np.nan, avg_roll, inplace=True)
+
+# Check for missing values again
+df.isnull().sum()
+
+# Replace missing gender values with "Female"
+gender = df["Gender"].astype("object")
+df["Gender"].replace(np.nan, "Female", inplace=True)
+
+# Check for missing values again
+df.isnull().sum()
+
+# Find the maximum marks for each paper
+max_1st = df["1st"].max()
+max_2nd = df["2nd"].max()
+max_3rd = df["3rd"].max()
+max_4th = df["4th"].max()
+max_5th = df["5th"].max()
+
+# Print the maximum marks for each paper
+print(max_1st, max_2nd, max_3rd, max_4th, max_5th)
+
+# Create a list of column names for CGPA and a list of their corresponding maximum values
+cgpa_columns = ['1st', '2nd', '3rd', '4th', '5th']
+max_values = [max_1st, max_2nd, max_3rd, max_4th, max_5th]
+
+# Calculate the percentage marks for each paper and add them as new columns in the DataFrame
+for col, max_value in zip(cgpa_columns, max_values):
+    df[col + '_Percentage'] = (df[col] / max_value) * 100
+
+# Display the modified DataFrame
+print(df)

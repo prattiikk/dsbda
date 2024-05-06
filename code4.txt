@@ -1,0 +1,90 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+from sklearn.preprocessing import StandardScaler
+import warnings
+
+# Ignore warnings
+warnings.filterwarnings("ignore")
+
+# Load the Boston housing dataset
+boston = load_boston()
+
+# Explore the keys of the dataset
+boston.keys()
+
+# Create DataFrame for features (x) and target (y)
+x = pd.DataFrame(boston.data, columns=boston.feature_names)
+y = pd.DataFrame(boston.target, columns=["MEDV"])
+
+# Display the first few rows of the features DataFrame
+x.head()
+
+# Check the shape of features and target DataFrames
+x.shape, y.shape
+
+# Display information about the features DataFrame
+x.info()
+
+# Display descriptive statistics of the features DataFrame
+x.describe()
+
+# Display information about the target DataFrame
+y.info()
+
+# Display descriptive statistics of the target DataFrame
+y.describe()
+
+# Check for missing values in the features DataFrame
+x.isnull().sum()
+
+# Check for missing values in the target DataFrame
+y.isnull().sum()
+
+# Combine features and target into a single DataFrame
+df = x
+df["target"] = y
+df.head()
+
+# Visualize the correlation matrix using a heatmap
+plt.figure(figsize=(15,10))
+sns.heatmap(df.corr(), annot=True)
+plt.show()
+
+# Select specific features and target for further analysis
+df = df[['RM','LSTAT','target']]
+
+# Visualize relationships between features and target using pairplot
+sns.pairplot(df)
+plt.show()
+
+# Prepare data for training by scaling features
+x = df[['RM', 'LSTAT']]
+scaler = StandardScaler()
+x_scaled = scaler.fit_transform(x)
+
+# Split data into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(x_scaled, y, test_size=0.3, shuffle=True)
+x_train.shape, x_test.shape, y_train.shape, y_test.shape
+
+# Train a Linear Regression model
+model = LinearRegression(n_jobs=-1)
+model.fit(x_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(x_test)
+
+# Calculate mean absolute error
+mae = mean_absolute_error(y_test, y_pred)
+
+# Calculate mean squared error
+mse = mean_squared_error(y_test, y_pred)
+
+# Visualize predictions vs. actual values
+sns.regplot(x=y_test, y=y_pred, color='blue')
+plt.show()
