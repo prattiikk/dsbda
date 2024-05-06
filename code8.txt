@@ -81,9 +81,12 @@ df = df.drop("Cabin", axis=1)
 # Display the shape of the DataFrame after dropping 'Cabin' column
 df.shape
 
+# Select only numerical columns
+numerical_df = df.select_dtypes(include='number')
+
 # Plot a heatmap of correlations between numerical columns
 plt.figure(figsize=(10,7))
-sns.heatmap(df.corr(), annot=True)
+sns.heatmap(numerical_df.corr(), annot=True)
 plt.show()
 
 # Display a count plot of 'Survived' column
