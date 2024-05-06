@@ -1,0 +1,47 @@
+package com.wc;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+// Import necessary Hadoop classes
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+
+// Main WordCount class containing the Mapper and Reducer classes
+public class WordCount {
+
+    // Mapper class to tokenize input text and emit key-value pairs
+    public static class TokenizerMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+
+        private final static IntWritable one = new IntWritable(1); // Initialize value as 1
+        private Text word = new Text(); // Text object to store each word
+
+        // Map method to tokenize input text and emit key-value pairs
+        public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+            StringTokenizer itr = new StringTokenizer(value.toString()); // Tokenize input text
+            while (itr.hasMoreTokens()) {
+                word.set(itr.nextToken()); // Set the word
+                context.write(word, one); // Emit key-value pair (word, 1)
+            }
+        }
+    }
+
+    // Reducer class to aggregate values for each key (word)
+    public static class IntSumReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+        private IntWritable result = new IntWritable(); // Initialize IntWritable object to store result
+
+        // Reduce method to sum up the counts for each word
+        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            int sum = 0; // Initialize sum
+            for (IntWritable val : values) { // Iterate over the values for the current key
+                sum += val.get(); // Sum up the counts
+            }
+            result.set(sum); // Set the result
+            context.write(key, result); // Emit key-value pair (word, total count)
+        }
+    }
+}
