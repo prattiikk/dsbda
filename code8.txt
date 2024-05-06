@@ -94,15 +94,15 @@ sns.countplot(df["Survived"])
 plt.show()
 
 # Display a count plot of 'Pclass' column with 'Survived' as hue
-sns.countplot(df["Pclass"], hue=df["Survived"])
+sns.countplot(x=df["Pclass"], hue=df["Survived"])
 plt.show()
 
 # Display a count plot of 'Sex' column with 'Survived' as hue
-sns.countplot(df["Sex"], hue=df["Survived"], palette="Accent")
+sns.countplot(x=df["Sex"], hue=df["Survived"], palette="Accent")
 plt.show()
 
 # Display a count plot of 'Embarked' column with 'Survived' as hue
-sns.countplot(df["Embarked"], hue=df["Survived"])
+sns.countplot(x=df["Embarked"], hue=df["Survived"])
 plt.show()
 
 # Display a histogram of 'Fare' column
