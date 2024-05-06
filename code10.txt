@@ -1,0 +1,71 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+from sklearn.datasets import load_iris
+import warnings
+
+# Suppress warnings
+warnings.filterwarnings("ignore")
+
+# Load the Iris dataset
+data = load_iris()
+
+# Create a DataFrame
+df = pd.DataFrame()
+
+# Add feature data to DataFrame
+df[data['feature_names']] = data['data']
+
+# Add target data to DataFrame
+df['label'] = data['target']
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Display the shape of the DataFrame
+df.shape
+
+# Display information about the DataFrame
+df.info()
+
+# Generate descriptive statistics of the DataFrame
+df.describe()
+
+# Plot a heatmap of correlations between features
+sns.heatmap(df.corr(), annot=True)
+plt.show()
+
+# Plot a histogram of sepal length
+sns.histplot(df["sepal length (cm)"], kde=True)
+plt.show()
+
+# Plot a histogram of sepal width
+sns.histplot(df["sepal width (cm)"], kde=True)
+plt.show()
+
+# Plot a histogram of petal length
+sns.histplot(df["petal length (cm)"], kde=True)
+plt.show()
+
+# Plot a histogram of petal width
+sns.histplot(df["petal width (cm)"], kde=True)
+plt.show()
+
+# Plot boxplots of sepal length grouped by label
+sns.boxplot(x=df['label'], y=df["sepal length (cm)"])
+plt.show()
+
+# Plot boxplots of sepal width grouped by label
+sns.boxplot(x=df['label'] ,y=df["sepal width (cm)"])
+plt.show()
+
+# Plot boxplots of petal length grouped by label
+sns.boxplot(x=df["label"] ,y=df["petal length (cm)"])
+plt.show()
+
+# Plot boxplots of petal width grouped by label
+sns.boxplot(x=df['label'] ,y=df["petal width (cm)"])
+plt.show()

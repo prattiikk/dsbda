@@ -6,10 +6,12 @@ import matplotlib.pyplot as plt  # Corrected import name
 # Load the dataset
 dataset = pd.read_csv('social_network_ads.csv')
 
+print(dataset.columns)
 
 # Select independent variables (features) and dependent variable (target)
-x = dataset.iloc[:, [2, 3]].values  # Independent variables (columns 2 and 3)
-y = dataset.iloc[:, 4].values       # Dependent variable (column 4)
+x = dataset.iloc[:, [0, 1]].values  # Independent variables (columns 2 and 3)
+y = dataset.iloc[:, 2].values       # Dependent variable (column 4)
+
 
 
 # Split the dataset into training and testing sets

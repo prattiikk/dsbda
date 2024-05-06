@@ -1,0 +1,73 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+
+# Suppress warnings
+import warnings
+warnings.filterwarnings("ignore")
+
+# Magic command to display plots inline
+%matplotlib inline
+
+# Read the CSV file into a DataFrame
+df = pd.read_csv("train.csv")
+
+# Display the shape of the DataFrame
+df.shape
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Display information about the DataFrame
+df.info()
+
+# Generate descriptive statistics of the DataFrame
+df.describe()
+
+# Check for missing values in the DataFrame
+df.isna().sum()
+
+# Fill missing values in the 'Age' column with the mean age
+df["Age"] = df["Age"].fillna(df["Age"].mean())
+
+# Check for missing values again
+df.isna().sum()
+
+# Define a function to map 'male' to 1 and other values to 0
+def fun1(value):
+    if (value == "male"):
+        return 1
+    else:
+        return 0
+ 
+# Define a function to map 'S' to 0, 'C' to 1, 'Q' to 2, and others to 0
+def fun2(value):
+    if (value == 'S'):
+        return 0
+    elif (value == 'C'):
+        return 1
+    elif (value == 'Q'):
+        return 2
+    else:
+        return 0
+        
+# Apply the functions to 'Sex' and 'Embarked' columns
+df["Sex"] = df["Sex"].apply(fun1)
+df["Embarked"] = df["Embarked"].apply(fun2)
+
+# Drop the 'Cabin' column
+df = df.drop("Cabin", axis=1)
+
+# Display the shape of the DataFrame after dropping 'Cabin' column
+df.shape
+
+# Create a box plot using Plotly Express
+px.box(df, x="Sex", y="Age", color="Survived")
+
+# Create a box plot using Seaborn
+plt.figure(figsize=(10,7))
+box = sns.boxplot(x=df["Sex"], y=df["Age"], hue=df["Survived"])
+plt.show()

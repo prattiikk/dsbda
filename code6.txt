@@ -1,0 +1,90 @@
+# Import necessary libraries
+# pip install the libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from mlxtend.plotting import plot_confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report, precision_score, recall_score, f1_score
+
+# Suppress warnings
+import warnings
+warnings.filterwarnings("ignore")
+
+# Magic command to display plots inline
+%matplotlib inline
+
+# Load the Iris dataset
+iris = load_iris()
+
+# Explore the keys of the Iris dataset
+iris.keys()
+
+# Create a DataFrame for features (x) and target (y) from the Iris dataset
+x = pd.DataFrame(iris['data'], columns=iris['feature_names'])
+y = pd.DataFrame(iris['target'], columns=['target'])
+
+# Display the first few rows of the features DataFrame
+x.head()
+
+# Display the shape of the features and target DataFrames
+x.shape, y.shape
+
+# Display information about the features DataFrame
+x.info()
+
+# Display information about the target DataFrame
+y.info()
+
+# Generate descriptive statistics of the features DataFrame
+x.describe()
+
+# Standardize the features using StandardScaler
+scaler = StandardScaler()
+x = scaler.fit_transform(x.values)
+
+# Split the dataset into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(x, y.values, test_size=0.2, random_state=42)
+
+# Display the shapes of training and testing sets
+x_train.shape, x_test.shape, y_train.shape, y_test.shape
+
+# Instantiate and fit the Gaussian Naive Bayes model
+model = GaussianNB()
+model.fit(x_train, y_train)
+
+# Predict the target values using the trained model
+y_pred = model.predict(x_test)
+
+# Generate confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+print(cm)
+
+# Plot the confusion matrix
+plot_confusion_matrix(conf_mat=cm, figsize=(5, 5), show_normed=True)
+plt.show()
+
+# Calculate and print TP, TN, FP, FN values
+print(f"TP value is {cm[0,0]}")
+print(f"TN value is {cm[1,1] + cm[2,2]}")
+print(f"FP value is {cm[0,1] + cm[0,2]}")
+print(f"FN value is {cm[1,0] + cm[2,0]}")
+
+# Calculate and print accuracy score
+print(f"Accuracy score is {accuracy_score(y_test, y_pred)}")
+
+# Calculate and print error rate
+print(f"Error rate is {1 - accuracy_score(y_test, y_pred)}")
+
+# Calculate and print precision score
+print(f"Precision score is {precision_score(y_test, y_pred, average='macro')}")
+
+# Calculate and print recall score
+print(f"Recall score is {recall_score(y_test, y_pred, average='macro')}")
+
+# Print classification report
+print(classification_report(y_test, y_pred))
